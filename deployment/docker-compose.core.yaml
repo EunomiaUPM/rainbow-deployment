@@ -5,7 +5,7 @@ services:
   # Core provider with start and setup services, along with its database
   ds_core_provider:
     container_name: ds_core_provider
-    image: quay.io/eunomia_upm/rainbow:0.3.8
+    image: quay.io/eunomia_upm/rainbow:0.3.9
     #platform: linux/amd64
     restart: on-failure
     depends_on:
@@ -13,24 +13,24 @@ services:
     ports:
       - "1200:1200"
     volumes:
-      - ./../.env.provider.core:/app/.env.provider.core
+      - ./../core.provider.yaml:/app/core.provider.yaml
       - ./../certificates:/app/certificates
       - ./../specs:/app/specs
     entrypoint: ["/usr/local/bin/rainbow_core"]
-    command: ["provider", "start", "--env-file", "/app/.env.provider.core"]
+    command: ["provider", "start", "--env-file", "/app/core.provider.yaml"]
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
   ds_core_provider_setup:
     container_name: ds_core_provider_setup
-    image: quay.io/eunomia_upm/rainbow:0.3.8
+    image: quay.io/eunomia_upm/rainbow:0.3.9
     #platform: linux/amd64
     depends_on:
       - ds_core_provider_db
     volumes:
-      - ./../.env.provider.core:/app/.env.provider.core
+      - ./../core.provider.yaml:/app/core.provider.yaml
     entrypoint: ["/usr/local/bin/rainbow_core"]
-    command: ["provider", "setup", "--env-file", "/app/.env.provider.core"]
+    command: ["provider", "setup", "--env-file", "/app/core.provider.yaml"]
 
   ds_core_provider_db:
     container_name: "ds_core_provider_db"
@@ -48,7 +48,7 @@ services:
   # Core consumer with start and setup services, along with its database
   ds_core_consumer:
     container_name: ds_core_consumer
-    image: quay.io/eunomia_upm/rainbow:0.3.8
+    image: quay.io/eunomia_upm/rainbow:0.3.9
     #platform: linux/amd64
     restart: on-failure
     depends_on:
@@ -56,24 +56,24 @@ services:
     ports:
       - "1100:1100"
     volumes:
-      - ./../.env.consumer.core:/app/.env.consumer.core
+      - ./../core.consumer.yaml:/app/core.consumer.yaml
       - ./../certificates:/app/certificates
       - ./../specs:/app/specs
     entrypoint: ["/usr/local/bin/rainbow_core"]
-    command: ["consumer", "start", "--env-file", "/app/.env.consumer.core"]
+    command: ["consumer", "start", "--env-file", "/app/core.consumer.yaml"]
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
   ds_core_consumer_setup:
     container_name: ds_core_consumer_setup
-    image: quay.io/eunomia_upm/rainbow:0.3.8
+    image: quay.io/eunomia_upm/rainbow:0.3.9
     #platform: linux/amd64
     depends_on:
       - ds_core_provider_db
     volumes:
-      - ./../.env.consumer.core:/app/.env.consumer.core
+      - ./../core.consumer.yaml:/app/core.consumer.yaml
     entrypoint: ["/usr/local/bin/rainbow_core"]
-    command: ["consumer", "setup", "--env-file", "/app/.env.consumer.core"]
+    command: ["consumer", "setup", "--env-file", "/app/core.consumer.yaml"]
 
   ds_core_consumer_db:
     container_name: ds_core_consumer_db
